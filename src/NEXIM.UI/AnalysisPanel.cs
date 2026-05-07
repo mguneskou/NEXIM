@@ -695,8 +695,22 @@ public sealed class AnalysisPanel : UserControl
         string modeTxt = mode.HasValue
             ? $"  |  {_cmbMode.Items[(int)mode.Value]}"
             : string.Empty;
-        _lblInfo.Text = $"{_cube.Rows}×{_cube.Columns} px  |  {_cube.Bands} bands" +
-                        $"  |  {wMin:F0}–{wMax:F0} nm{modeTxt}  |  {_cube.FileName}";
+
+        // Compute global min/max across the whole cube for diagnostics.
+        float gMin = float.MaxValue, gMax = float.MinValue;
+        foreach (var slice in _cube.Cube)
+            foreach (float v in slice)
+            {
+                if (v < gMin) gMin = v;
+                if (v > gMax) gMax = v;
+            }
+
+        string uniform = MathF.Abs(gMax - gMin) < 1e-4f * MathF.Max(MathF.Abs(gMax), 1f)
+            ? "  ⚠ UNIFORM — load an image in Image Input for spatial variation"
+            : string.Empty;
+
+        _lblInfo.Text = $"{_cube.Rows}×{_cube.Columns} px  |  {_cube.Bands} bands  |  " +
+                        $"{wMin:F0}–{wMax:F0} nm  |  val [{gMin:G4} … {gMax:G4}]{uniform}{modeTxt}";
     }
 
     static double[] ReconstructWavelengths(NxiHeader hdr)

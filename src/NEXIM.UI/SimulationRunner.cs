@@ -151,14 +151,23 @@ public sealed class SimulationRunner
                 }
                 else
                 {
-                    pixelRadiance = upwellingOnSensorGrid;
+                    // Copy the baseline so each pixel gets independent noise.
+                    pixelRadiance = (double[])upwellingOnSensorGrid.Clone();
                 }
 
                 var pixelResult = sensorPanel.SimulatePixel(pixelRadiance, sensorWl, rng);
                 int pixIdx = r * cols + c;
                 dnCube[pixIdx] = pixelResult.Dn;
                 for (int b = 0; b < nBands; b++)
-                    bilCube[r * nBands + b][c] = (float)pixelResult.EffectiveRadiance[b];
+                {
+                    // Store noise-scaled radiance: L_noisy = L_eff * (e_noisy / e_mean)
+                    // so the BIL cube reflects true sensor measurement variability.
+                    double meanE  = pixelResult.MeanElectrons[b];
+                    double factor = meanE > 1e-12
+                        ? pixelResult.NoisyElectrons[b] / meanE
+                        : 1.0;
+                    bilCube[r * nBands + b][c] = (float)(pixelResult.EffectiveRadiance[b] * factor);
+                }
 
                 if (_materialMap is not null && (pixIdx + 1) % 100 == 0)
                     progress?.Report((50 + (int)((double)pixIdx / totalPixels * 45),
