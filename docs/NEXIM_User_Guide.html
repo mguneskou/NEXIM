@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NEXIM User Guide — v1.0</title>
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Screen + Print styles
+   To export as PDF: open in Chrome or Edge → Ctrl+P → Save as PDF
+   Page: A4, margins 15 mm, Background graphics = ON
+   ──────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap');
+
+:root{
+  --blue:  #003c78;
+  --mid:   #0055a5;
+  --light: #e8f1fb;
+  --accent:#e8722a;
+  --gray:  #5a5a5a;
+  --lgray: #f4f4f4;
+  --bdr:   #c8d4e8;
+  --text:  #1a1a1a;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'Source Sans 3',Helvetica,Arial,sans-serif;
+  font-size:10.5pt;
+  line-height:1.65;
+  color:var(--text);
+  background:#fff;
+  max-width:180mm;
+  margin:0 auto;
+  padding:10mm 0;
+}
+
+/* ── Cover page ─────────────────────────────────────────────────────── */
+.cover{
+  background:linear-gradient(135deg,var(--blue) 0%,var(--mid) 60%,#1a7fc2 100%);
+  color:#fff;
+  padding:28mm 20mm 20mm;
+  page-break-after:always;
+}
+.cover .logo{font-size:52pt;font-weight:700;letter-spacing:-1px}
+.cover .tagline{font-size:14pt;font-weight:300;margin-top:4px;opacity:.9}
+.cover .version{font-size:10pt;margin-top:24mm;opacity:.75}
+.cover h2{font-size:16pt;font-weight:600;margin-top:6mm;border-top:1px solid rgba(255,255,255,.35);padding-top:4mm}
+
+/* ── TOC ───────────────────────────────────────────────────────────── */
+.toc{page-break-after:always;padding:12mm 10mm}
+.toc h2{font-size:16pt;color:var(--blue);margin-bottom:6mm;padding-bottom:2mm;border-bottom:2px solid var(--bdr)}
+.toc ol{padding-left:0;list-style:none}
+.toc > ol > li{padding:1.5mm 0;border-bottom:1px dotted #ccc}
+.toc > ol > li > a{font-size:10.5pt;font-weight:600;color:var(--mid);text-decoration:none}
+.toc > ol > li > ol{padding-left:8mm;list-style:none}
+.toc > ol > li > ol > li{padding:0.8mm 0}
+.toc > ol > li > ol > li a{font-size:9.5pt;color:var(--gray);text-decoration:none}
+
+/* ── Page breaks ────────────────────────────────────────────────────── */
+section{page-break-before:always;padding:0 10mm}
+section:first-of-type{page-break-before:avoid}
+
+/* ── Headings ───────────────────────────────────────────────────────── */
+h1{font-size:20pt;color:var(--blue);margin:8mm 0 4mm;
+   border-bottom:3px solid var(--blue);padding-bottom:2mm}
+h2{font-size:14pt;color:var(--mid);margin:7mm 0 3mm}
+h3{font-size:11pt;color:var(--blue);margin:5mm 0 2mm;font-weight:600}
+h4{font-size:10pt;color:var(--gray);margin:4mm 0 1.5mm;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+
+/* ── Body text ──────────────────────────────────────────────────────── */
+p{margin-bottom:3mm}
+ul,ol{padding-left:6mm;margin-bottom:3mm}
+li{margin-bottom:1mm}
+a{color:var(--mid)}
+strong{font-weight:600}
+em{color:var(--gray)}
+code{font-family:'Source Code Pro',Consolas,monospace;font-size:9pt;
+     background:var(--lgray);border:1px solid var(--bdr);padding:0 2px;border-radius:2px}
+pre{background:var(--lgray);border:1px solid var(--bdr);border-radius:4px;
+    padding:3mm 4mm;margin:3mm 0;overflow-x:auto}
+pre code{background:none;border:none}
+
+/* ── Info / tip / warning boxes ─────────────────────────────────────── */
+.box{border-left:4px solid;padding:2.5mm 4mm;margin:3mm 0;border-radius:0 4px 4px 0}
+.tip {background:#eef8ec;border-color:#3a9d43;color:#1a4a1e}
+.note{background:var(--light);border-color:var(--mid);color:#002a5a}
+.warn{background:#fff3e0;border-color:var(--accent);color:#4a2000}
+.box strong{display:block;margin-bottom:1mm;font-size:9pt;text-transform:uppercase;letter-spacing:.4px}
+
+/* ── Tables ─────────────────────────────────────────────────────────── */
+table{width:100%;border-collapse:collapse;margin:3mm 0;font-size:9.5pt}
+thead{background:var(--blue);color:#fff}
+thead th{padding:2.5mm 3mm;text-align:left;font-weight:600}
+tbody tr:nth-child(even){background:var(--lgray)}
+tbody tr:nth-child(odd) {background:#fff}
+tbody td{padding:2mm 3mm;border-bottom:1px solid var(--bdr)}
+tbody td:first-child{font-weight:600;white-space:nowrap}
+
+/* ── Screenshot placeholders ─────────────────────────────────────────── */
+.screenshot{
+  border:1px dashed var(--bdr);border-radius:4px;
+  background:var(--lgray);height:50mm;
+  display:flex;align-items:center;justify-content:center;
+  color:#999;font-style:italic;font-size:9.5pt;margin:3mm 0;
+}
+
+/* ── Workflow steps ─────────────────────────────────────────────────── */
+.steps{counter-reset:step;padding-left:0;list-style:none;margin:3mm 0}
+.steps li{counter-increment:step;padding:2mm 2mm 2mm 10mm;position:relative;margin-bottom:2mm;
+           border-left:3px solid var(--bdr)}
+.steps li::before{content:counter(step);position:absolute;left:-1.5mm;top:1.5mm;
+  background:var(--blue);color:#fff;width:5.5mm;height:5.5mm;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:8pt;font-weight:700}
+
+/* ── Mode comparison table ──────────────────────────────────────────── */
+.mode-badge{display:inline-block;border-radius:3px;padding:1px 5px;font-size:8.5pt;font-weight:700}
+.m1{background:#d4edda;color:#155724}
+.m2{background:#cce5ff;color:#004085}
+.m3{background:#f8d7da;color:#721c24}
+
+/* ── Print overrides ─────────────────────────────────────────────────── */
+@media print{
+  body{max-width:none;padding:0}
+  section{padding:0 10mm}
+  h1,h2,h3{page-break-after:avoid}
+  table,figure,.box{page-break-inside:avoid}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════ COVER -->
+<div class="cover">
+  <div class="logo">NEXIM</div>
+  <div class="tagline">Novel End-to-eXtended hyperspectral IMage simulator</div>
+  <h2>User Guide</h2>
+  <div class="version">Version 1.0 &nbsp;·&nbsp; May 2026 &nbsp;·&nbsp; Platform: Windows 10/11 (.NET 9)</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════ TOC -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#s1">1 &ensp; Overview</a>
+      <ol>
+        <li><a href="#s1-1">1.1 &ensp; What is NEXIM?</a></li>
+        <li><a href="#s1-2">1.2 &ensp; Three Atmospheric RT Modes</a></li>
+        <li><a href="#s1-3">1.3 &ensp; Novel Contributions</a></li>
+      </ol>
+    </li>
+    <li><a href="#s2">2 &ensp; Installation &amp; Launch</a></li>
+    <li><a href="#s3">3 &ensp; Image Input Tab</a>
+      <ol>
+        <li><a href="#s3-1">3.1 &ensp; Loading a Source Image</a></li>
+        <li><a href="#s3-2">3.2 &ensp; Unsupervised Classification</a></li>
+        <li><a href="#s3-3">3.3 &ensp; Spectral Library</a></li>
+        <li><a href="#s3-4">3.4 &ensp; Material Assignments</a></li>
+      </ol>
+    </li>
+    <li><a href="#s4">4 &ensp; Scene Setup Tab</a></li>
+    <li><a href="#s5">5 &ensp; Atmosphere Tab</a>
+      <ol>
+        <li><a href="#s5-1">5.1 &ensp; RT Modes</a></li>
+        <li><a href="#s5-2">5.2 &ensp; Spectral Range</a></li>
+        <li><a href="#s5-3">5.3 &ensp; Atmospheric Profile</a></li>
+      </ol>
+    </li>
+    <li><a href="#s6">6 &ensp; Sensor Tab</a></li>
+    <li><a href="#s7">7 &ensp; Segmentation Tab</a></li>
+    <li><a href="#s8">8 &ensp; Running a Simulation</a></li>
+    <li><a href="#s9">9 &ensp; Exporting Results</a></li>
+    <li><a href="#s10">10 &ensp; Spectral Library Reference</a></li>
+    <li><a href="#s11">11 &ensp; Technical Reference</a></li>
+    <li><a href="#s12">12 &ensp; Troubleshooting</a></li>
+  </ol>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ 1  OVERVIEW -->
+<section id="s1">
+<h1>1 &ensp; Overview</h1>
+
+<h2 id="s1-1">1.1 &ensp; What is NEXIM?</h2>
+<p>
+  NEXIM (<em>Novel End-to-eXtended hyperspectral IMage simulator</em>) is a free,
+  open-source, physics-based hyperspectral scene simulator for Windows.  It
+  generates synthetic radiance cubes in the UV–Far-IR spectral range
+  (0.4–2.5 µm and beyond), comparable in accuracy to CameoSim, DIRSIG, and
+  MODTRAN-based tools — with zero commercial dependencies.
+</p>
+<p>
+  NEXIM combines a native C# correlated-k distribution (CKD) atmospheric
+  radiative-transfer engine with a three-mode accuracy/speed tradeoff, an
+  optional libRadtran subprocess for maximum fidelity, a spectral material
+  library pipeline driven by real RGB imagery, and eight segmentation
+  algorithms — all packaged in a single Windows Forms desktop application.
+</p>
+
+<h2 id="s1-2">1.2 &ensp; Three Atmospheric RT Modes</h2>
+<table>
+  <thead>
+    <tr><th>Mode</th><th>Engine</th><th>Accuracy</th><th>Speed</th><th>External dep.</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="mode-badge m1">1 FAST</span></td>
+      <td>Pre-computed LUT (~50 MB bundled)</td>
+      <td>±5–10 %</td>
+      <td>&lt; 10 ms</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><span class="mode-badge m2">2 ACCURATE</span></td>
+      <td>Native C# CKD + DISORT 8-stream</td>
+      <td>±0.5–1 % (MODTRAN-class)</td>
+      <td>100–500 ms</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><span class="mode-badge m3">3 FULL-PHYSICS</span></td>
+      <td>libRadtran via WSL2 subprocess</td>
+      <td>±0.1–0.5 %</td>
+      <td>5–30 s</td>
+      <td>WSL2 + libRadtran</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="s1-3">1.3 &ensp; Novel Contributions</h2>
+<ul>
+  <li>First MODTRAN-class atmospheric RT engine in pure C#, freely redistributable.</li>
+  <li>First zero-dependency broadband (UV–Far-IR) scene simulator on Windows desktop.</li>
+  <li>Image-driven per-pixel material pipeline: load an RGB photo, cluster it, and assign spectra automatically via CIE-Lab nearest-neighbour matching.</li>
+  <li>Eight segmentation algorithms (K-means, GMM, DBSCAN, SAM, …) with a unified comparison dashboard.</li>
+  <li>Unified reflective + emissive pipeline (UV–Far-IR) in one tool.</li>
+  <li>Three-mode accuracy/speed tradeoff with quantified error per mode.</li>
+</ul>
+</section>
+
+<!-- ══════════════════════════════════════════════════ 2  INSTALLATION -->
+<section id="s2">
+<h1>2 &ensp; Installation &amp; Launch</h1>
+
+<h3>System Requirements</h3>
+<table>
+  <thead><tr><th>Component</th><th>Requirement</th></tr></thead>
+  <tbody>
+    <tr><td>OS</td><td>Windows 10 22H2 or Windows 11 (x64)</td></tr>
+    <tr><td>Runtime</td><td>.NET 9 Desktop Runtime (auto-installs with Setup.exe)</td></tr>
+    <tr><td>RAM</td><td>4 GB minimum; 8 GB recommended for large images</td></tr>
+    <tr><td>Disk</td><td>300 MB for application; 50 MB LUT; up to 2 GB USGS spectral cache</td></tr>
+    <tr><td>WSL2 (optional)</td><td>For Mode 3 Full-Physics; NEXIM wizard installs libRadtran automatically</td></tr>
+  </tbody>
+</table>
+
+<h3>Install Steps</h3>
+<ol class="steps">
+  <li>Download <code>NEXIM_Setup_v1.0.exe</code> from the GitHub Releases page.</li>
+  <li>Run the installer (may prompt for .NET 9 Desktop Runtime download — allow it).</li>
+  <li>Launch NEXIM from the Start Menu or desktop shortcut.</li>
+  <li><em>Optional:</em> For Mode 3, open <strong>Tools → Install libRadtran</strong> and follow the wizard.  WSL2 must be enabled in Windows Features first.</li>
+</ol>
+
+<div class="box note"><strong>Note</strong>
+  The application data directory is <code>%APPDATA%\NEXIM</code>.
+  Spectral library downloads and LUT files are stored here and persist across updates.
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════ 3  IMAGE INPUT -->
+<section id="s3">
+<h1>3 &ensp; Image Input Tab</h1>
+<p>
+  The <strong>Image Input</strong> tab (first tab) drives the <em>image-based simulation
+  pipeline</em>: load an RGB photograph of your scene, cluster its pixels into material
+  classes, match each class to a spectral signature from the library, and create a
+  per-pixel <code>MaterialMap</code> that the simulator uses to assign realistic reflectance
+  spectra to every pixel.
+</p>
+<p>
+  If no image is loaded, the simulation falls back to a flat-reflectance scene
+  (controlled by the Albedo slider on the Scene Setup tab).
+</p>
+
+<div class="screenshot">[Screenshot: Image Input tab with source image and cluster map side by side]</div>
+
+<h2 id="s3-1">3.1 &ensp; Loading a Source Image</h2>
+<p>
+  The left panel of the top row shows the <strong>Source Image</strong> preview.
+</p>
+<ol class="steps">
+  <li>Click <strong>Browse…</strong> next to the path box.</li>
+  <li>Select any BMP, PNG, JPEG, GIF, or TIFF file.  Colour depth can be 8-bit palette, 24-bit RGB, or 32-bit ARGB; NEXIM converts internally to 32-bit ARGB.</li>
+  <li>A thumbnail appears in the preview box.  The status bar shows the pixel dimensions.</li>
+</ol>
+<div class="box tip"><strong>Tip</strong>
+  Images from any nadir or oblique camera work well.  Aerial/satellite imagery is ideal.
+  Very large images (&gt;4000 × 4000 px) are supported but classification will be slower.
+</div>
+
+<h2 id="s3-2">3.2 &ensp; Unsupervised Classification</h2>
+<p>
+  Choose a clustering method, set its parameters, and click <strong>▶ Classify Image</strong>.
+  The cluster map appears on the right panel of the top row — each colour represents
+  one material cluster.
+</p>
+
+<h3>Methods</h3>
+<table>
+  <thead><tr><th>Method</th><th>Parameter</th><th>Best for</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>K-means</td>
+      <td><em>Clusters</em> — number of classes (2–64, default 6)</td>
+      <td>Fast, reliable for most scenes; good starting point</td>
+    </tr>
+    <tr>
+      <td>GMM</td>
+      <td><em>Clusters</em> — same as K-means</td>
+      <td>Soft assignments; better when cluster sizes vary greatly</td>
+    </tr>
+    <tr>
+      <td>DBSCAN</td>
+      <td><em>ε</em> (0.01–1.0) and <em>Min points</em> (1–200)</td>
+      <td>Automatically discovers number of clusters; handles irregular shapes;
+          noise pixels (label −1) are mapped to cluster 0</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="box note"><strong>Note</strong>
+  Clustering is performed in RGB feature space (R/255, G/255, B/255 ∈ [0,1]).
+  For ε in DBSCAN, a value of 0.10 means two pixels must be within 10 % of full
+  colour range to be in the same cluster.
+</div>
+
+<h2 id="s3-3">3.3 &ensp; Spectral Library</h2>
+<p>
+  After clustering, each cluster centroid's RGB colour is matched to the nearest
+  spectral signature in the selected library using CIE-Lab ΔE76 colour distance.
+  The match is shown in the Material Assignments grid.
+</p>
+
+<h3>Library Sources</h3>
+<table>
+  <thead><tr><th>Source</th><th>Spectra</th><th>Setup required</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Embedded</td>
+      <td>23 curated spectra (vegetation, soils, urban, water, minerals, snow)</td>
+      <td>None — always available</td>
+    </tr>
+    <tr>
+      <td>USGS splib07b curated</td>
+      <td>~26 hand-picked spectra</td>
+      <td>Click <strong>⬇ Download Curated</strong>.  Internet connection required once.</td>
+    </tr>
+    <tr>
+      <td>USGS splib07b full</td>
+      <td>Hundreds per chapter (8 chapters available)</td>
+      <td>Click <strong>⬇ Download Full USGS Library…</strong>, select chapters.
+          Chapter 7 (Vegetation) has 100+ spectra alone.</td>
+    </tr>
+    <tr>
+      <td>Custom CSV</td>
+      <td>Unlimited — user-supplied</td>
+      <td>Browse to a CSV file (see <a href="#s10">§10</a> for format)</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="box tip"><strong>Tip: Downloading the full USGS library</strong>
+  Select all 8 chapters for a comprehensive library covering minerals, soils,
+  vegetation, water, urban materials, coatings, organics, and mixtures.
+  Downloads are cached; re-running the download only fetches new files.
+  Expect 50–300 MB per chapter depending on chapter size.
+</div>
+
+<h2 id="s3-4">3.4 &ensp; Material Assignments</h2>
+<p>
+  The <strong>Material Assignments</strong> grid shows, for each cluster:
+</p>
+<ul>
+  <li><strong>#</strong> — cluster number (1-based)</li>
+  <li><strong>Centroid</strong> — the mean RGB colour of the cluster (hex + colour swatch)</li>
+  <li><strong>Matched Spectrum</strong> — the closest spectral signature in the library</li>
+  <li><strong>Category</strong> — material category (Vegetation, Soil, Urban, etc.)</li>
+</ul>
+<p>
+  Click <strong>↺ Refresh Assignments</strong> to re-run the CIE-Lab matching after
+  changing the spectral library selection without re-running the clustering.
+</p>
+</section>
+
+<!-- ══════════════════════════════════════════════════ 4  SCENE SETUP -->
+<section id="s4">
+<h1>4 &ensp; Scene Setup Tab</h1>
+<p>
+  The Scene Setup tab controls scene geometry, illumination angles, and the default
+  surface material used when no image-based material map is available.
+</p>
+<table>
+  <thead><tr><th>Parameter</th><th>Unit</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Rows / Columns</td><td>pixels</td><td>Scene grid dimensions.  Overridden by the image dimensions when Image Input is active.</td></tr>
+    <tr><td>Pixel size</td><td>m</td><td>Ground sampling distance per pixel.</td></tr>
+    <tr><td>Solar Zenith Angle (SZA)</td><td>°</td><td>0 = overhead sun; 90 = horizon.</td></tr>
+    <tr><td>Solar Azimuth Angle (SAA)</td><td>°</td><td>Measured clockwise from North.</td></tr>
+    <tr><td>View Zenith Angle (VZA)</td><td>°</td><td>Sensor nadir angle; 0 = straight down.</td></tr>
+    <tr><td>View Azimuth Angle (VAA)</td><td>°</td><td>Sensor look azimuth.</td></tr>
+    <tr><td>BRDF Model</td><td>—</td><td>Lambertian, Oren-Nayar, Hapke, Modified Phong</td></tr>
+    <tr><td>Albedo</td><td>0–1</td><td>Scene-wide reflectance when no material map is loaded.</td></tr>
+    <tr><td>Roughness</td><td>0–1</td><td>Surface roughness for non-Lambertian BRDF models.</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════════════════════════════════════════════ 5  ATMOSPHERE -->
+<section id="s5">
+<h1>5 &ensp; Atmosphere Tab</h1>
+
+<h2 id="s5-1">5.1 &ensp; RT Modes</h2>
+<p>
+  Select the atmospheric radiative-transfer mode for this simulation run.
+  Hover over each mode's radio button for a brief description.
+</p>
+
+<table>
+  <thead><tr><th>Mode</th><th>Engine</th><th>Typical use case</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="mode-badge m1">FAST</span></td>
+      <td>Pre-computed LUT interpolation</td>
+      <td>Rapid prototyping, batch runs, real-time previews</td>
+    </tr>
+    <tr>
+      <td><span class="mode-badge m2">ACCURATE</span></td>
+      <td>CKD k-tables (from HITRAN) + DISORT 8-stream</td>
+      <td>Publication-quality simulations; default recommendation</td>
+    </tr>
+    <tr>
+      <td><span class="mode-badge m3">FULL PHYSICS</span></td>
+      <td>libRadtran (WSL2 subprocess)</td>
+      <td>Validation against real data; adjacency effects; 3D clouds</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="box warn"><strong>Warning</strong>
+  Mode 1 FAST requires the LUT file at <code>data/lut/nexim_v1.lut</code>.
+  If the file is absent, NEXIM automatically falls back to Mode 2 ACCURATE.
+</div>
+
+<h2 id="s5-2">5.2 &ensp; Spectral Range</h2>
+<table>
+  <thead><tr><th>Parameter</th><th>Unit</th><th>Default</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Start wavelength</td><td>µm</td><td>0.40</td><td>Short-wave cutoff</td></tr>
+    <tr><td>End wavelength</td><td>µm</td><td>2.50</td><td>Long-wave cutoff</td></tr>
+    <tr><td>Step</td><td>µm</td><td>0.01</td><td>RT calculation grid step</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s5-3">5.3 &ensp; Atmospheric Profile</h2>
+<table>
+  <thead><tr><th>Parameter</th><th>Unit</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Profile</td><td>—</td><td>Standard atmosphere: Tropical, Mid-Lat Summer/Winter, Sub-Arctic Summer/Winter, US Standard 1976</td></tr>
+    <tr><td>Altitude</td><td>km</td><td>Sensor platform altitude above sea level</td></tr>
+    <tr><td>AOT 550</td><td>—</td><td>Aerosol optical thickness at 550 nm (0 = clear, 0.5 = hazy)</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════════════════════════════════════════════ 6  SENSOR -->
+<section id="s6">
+<h1>6 &ensp; Sensor Tab</h1>
+<p>
+  The Sensor tab models the electro-optical sensor that observes the scene radiance.
+  Three subsections control the spectral response, optics, and detector noise.
+</p>
+
+<h3>Spectral Response Function (SRF)</h3>
+<table>
+  <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>SRF Type</td><td><em>Top-hat</em> (uniform passband) or <em>Gaussian</em> (smooth roll-off)</td></tr>
+    <tr><td>Bands</td><td>Number of spectral bands (1–512)</td></tr>
+    <tr><td>Start / End wavelength</td><td>Sensor passband limits (µm)</td></tr>
+    <tr><td>FWHM fraction</td><td>Full-Width-Half-Maximum as a fraction of band spacing (Gaussian only)</td></tr>
+    <tr><td>Peak QE</td><td>Peak quantum efficiency (0–1)</td></tr>
+  </tbody>
+</table>
+
+<h3>Optics</h3>
+<table>
+  <thead><tr><th>Parameter</th><th>Unit</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Optics transmittance</td><td>0–1</td><td>Combined lens and filter throughput</td></tr>
+    <tr><td>IFOV</td><td>mrad</td><td>Instantaneous field of view of one detector element</td></tr>
+    <tr><td>Altitude</td><td>m</td><td>Platform altitude (determines GSD)</td></tr>
+  </tbody>
+</table>
+
+<h3>Detector Noise</h3>
+<table>
+  <thead><tr><th>Parameter</th><th>Unit</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Pixel pitch</td><td>µm</td><td>Detector element size</td></tr>
+    <tr><td>Integration time</td><td>ms</td><td>Exposure duration per line</td></tr>
+    <tr><td>Full well capacity</td><td>e⁻</td><td>Maximum electrons before saturation</td></tr>
+    <tr><td>ADC bits</td><td>bits</td><td>Analogue-to-digital converter resolution (8–16)</td></tr>
+    <tr><td>Read noise</td><td>e⁻</td><td>RMS read noise per pixel</td></tr>
+    <tr><td>Dark current</td><td>e⁻/s</td><td>Thermal dark current rate</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════════════════════════════════════════════ 7  SEGMENTATION -->
+<section id="s7">
+<h1>7 &ensp; Segmentation Tab</h1>
+<p>
+  The Segmentation tab runs spectral segmentation on the <em>simulated radiance cube</em>
+  after simulation completes, and displays a false-colour label map.
+</p>
+<p>
+  Unlike the Image Input tab (which clusters RGB pixels for material assignment),
+  this tab clusters the full-spectrum radiance vectors — providing a spectral
+  classification of the simulated scene.
+</p>
+
+<table>
+  <thead><tr><th>Algorithm</th><th>Parameters</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>K-means</td><td>Clusters</td><td>Lloyd's algorithm; pure C# implementation</td></tr>
+    <tr><td>GMM</td><td>Clusters</td><td>EM with diagonal covariance; initialised by K-means</td></tr>
+    <tr><td>DBSCAN</td><td>ε, Min points</td><td>Density-based; discovers cluster count automatically</td></tr>
+    <tr><td>SAM</td><td>Threshold (°), Endmembers</td><td>Spectral Angle Mapper; add endmembers with <strong>Add endmember…</strong></td></tr>
+  </tbody>
+</table>
+
+<h3>SAM Endmembers</h3>
+<p>
+  Click <strong>Add endmember…</strong> to define a reference spectrum by name and
+  comma-separated reflectance values.  If no endmembers are added, NEXIM
+  auto-derives them from K-means centroids.
+</p>
+</section>
+
+<!-- ══════════════════════════════════════════════════ 8  RUNNING -->
+<section id="s8">
+<h1>8 &ensp; Running a Simulation</h1>
+
+<ol class="steps">
+  <li>
+    <strong>(Optional)</strong> Load an RGB image on the Image Input tab, classify it, and verify the material assignments.
+  </li>
+  <li>
+    Configure scene geometry on the <strong>Scene Setup</strong> tab.
+    If an image is loaded, Rows and Columns are automatically taken from the image dimensions.
+  </li>
+  <li>
+    Select the atmospheric RT mode and profile on the <strong>Atmosphere</strong> tab.
+    For quick test runs, use <span class="mode-badge m1">FAST</span> or
+    <span class="mode-badge m2">ACCURATE</span>.
+  </li>
+  <li>
+    Configure the sensor on the <strong>Sensor</strong> tab.
+    For a default hyperspectral sensor, the factory settings (32 bands, Gaussian SRF) are a good starting point.
+  </li>
+  <li>
+    Click <strong>▶ Run Simulation</strong> at the bottom of the window.
+    Progress is shown in the status bar and progress bar.
+  </li>
+  <li>
+    When complete, the status bar shows the scene dimensions, band count, and elapsed time.
+    If segmentation is enabled on the Segmentation tab, the label map is rendered automatically.
+  </li>
+</ol>
+
+<div class="box tip"><strong>Performance tip</strong>
+  For large images (e.g., 1000 × 1000 px), the image-driven pipeline renders each pixel
+  individually.  Use Mode 1 FAST for initial exploration; switch to Mode 2 ACCURATE for
+  final output.  Mode 2 runtime scales linearly with pixel count.
+</div>
+
+<div class="box note"><strong>Image-driven simulation</strong>
+  When a MaterialMap is active, each pixel's reflectance is taken from the matched
+  spectral signature.  The radiance model is:
+</div>
+<pre><code>L(λ) = L_path(λ)  +  T(λ) · ρ_pixel(λ) · E_d(λ) / π</code></pre>
+<p>where <em>L_path</em> is atmospheric path radiance, <em>T</em> is transmittance,
+<em>ρ_pixel</em> is the per-pixel spectral reflectance, and <em>E_d</em> is
+downwelling solar irradiance at the surface.</p>
+</section>
+
+<!-- ══════════════════════════════════════════════════ 9  EXPORT -->
+<section id="s9">
+<h1>9 &ensp; Exporting Results</h1>
+<p>
+  After a successful simulation run, click <strong>⬇ Export…</strong> to save the
+  radiance cube.  Three formats are supported:
+</p>
+
+<table>
+  <thead><tr><th>Format</th><th>Extension</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>NEXIM native</td>
+      <td><code>.nxi</code></td>
+      <td>Binary BIL float32 with CRC32 integrity check and JSON metadata header.  Lossless; recommended for further NEXIM processing.</td>
+    </tr>
+    <tr>
+      <td>ENVI image</td>
+      <td><code>.img</code> + <code>.hdr</code></td>
+      <td>BSQ float32 compatible with ENVI, QGIS, SNAP, and most remote sensing toolboxes.</td>
+    </tr>
+    <tr>
+      <td>CSV long-form</td>
+      <td><code>.csv</code></td>
+      <td>One row per pixel-band combination: <em>row, col, band, wavelength_um, radiance</em>.  Suitable for post-processing in Python / R / Excel.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>NXI metadata fields</h3>
+<table>
+  <thead><tr><th>Field</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>SceneName</td><td>User-defined label</td></tr>
+    <tr><td>Wavelengths_um</td><td>Array of band centre wavelengths in µm</td></tr>
+    <tr><td>CreatedUtc</td><td>ISO-8601 UTC timestamp</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════════════════════════════════════════════ 10  LIBRARY REF -->
+<section id="s10">
+<h1>10 &ensp; Spectral Library Reference</h1>
+
+<h2>Embedded Spectra (23 entries)</h2>
+<table>
+  <thead><tr><th>Category</th><th>Spectra</th></tr></thead>
+  <tbody>
+    <tr><td>Vegetation (6)</td><td>Healthy Grass, Dry Grass, Deciduous Forest, Conifer Forest, Green Crop, Desert Shrub</td></tr>
+    <tr><td>Soil (5)</td><td>Dry Sandy, Moist, Red Laterite, Organic Rich, Desert Bright</td></tr>
+    <tr><td>Water (2)</td><td>Clear, Turbid</td></tr>
+    <tr><td>Urban (5)</td><td>Concrete Gray, Asphalt, Metal Roof, Roof Tile Red, White Paint</td></tr>
+    <tr><td>Mineral (3)</td><td>Limestone, Basalt, Goethite</td></tr>
+    <tr><td>Snow (2)</td><td>Fresh Snow, Old Snow</td></tr>
+  </tbody>
+</table>
+<p style="font-size:9pt;color:var(--gray)">
+  Citation: USGS Spectral Library v7 (public domain, doi:10.3133/ds1035).
+  Wavelength grid: 43 points from 0.40 to 2.50 µm at 0.05 µm spacing.
+</p>
+
+<h2>Custom CSV Format</h2>
+<p>NEXIM accepts two CSV layouts:</p>
+<h4>Single-spectrum CSV (one spectrum per file)</h4>
+<pre><code>wavelength_um,reflectance
+0.40,0.043
+0.45,0.048
+...
+</code></pre>
+<h4>Multi-spectrum CSV (multiple spectra in one file)</h4>
+<pre><code>name,category,wl_0.40,wl_0.45,...,wl_2.50
+GreenGrass,Vegetation,0.043,0.049,...,0.121
+Asphalt,Urban,0.052,0.058,...,0.082
+...
+</code></pre>
+<p>
+  The header row is optional for single-spectrum files.  For multi-spectrum files,
+  column names <code>name</code> and <code>category</code> are expected first, followed
+  by wavelength columns with the prefix <code>wl_</code> or plain float values.
+</p>
+
+<h2>USGS splib07b Chapters</h2>
+<table>
+  <thead><tr><th>Chapter</th><th>Category</th><th>Content examples</th></tr></thead>
+  <tbody>
+    <tr><td>chapter1</td><td>Mineral</td><td>Calcite, Kaolinite, Goethite, Quartz, 100+ minerals</td></tr>
+    <tr><td>chapter2</td><td>Soil</td><td>Sandy, loam, clay, peat, laterite soils</td></tr>
+    <tr><td>chapter3</td><td>Coating</td><td>Paint coatings, weathering crusts</td></tr>
+    <tr><td>chapter4</td><td>Liquid</td><td>Water (clear, turbid, chlorophyll), oil</td></tr>
+    <tr><td>chapter5</td><td>Organic</td><td>Coal, charcoal, organic matter</td></tr>
+    <tr><td>chapter6</td><td>Urban</td><td>Asphalt, concrete, roofing, metals</td></tr>
+    <tr><td>chapter7</td><td>Vegetation</td><td>Grasses, trees, crops, lichens — 100+ entries</td></tr>
+    <tr><td>chapter8</td><td>Mixture</td><td>Soil-vegetation, urban-vegetation mixtures</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════════════════════════════════════════════ 11  TECH REF -->
+<section id="s11">
+<h1>11 &ensp; Technical Reference</h1>
+
+<h2>Per-pixel Radiance Model</h2>
+<p>For image-driven simulations, the at-sensor spectral radiance for pixel (r,c) is:</p>
+<pre><code>L(r,c,λ) = L_path(λ)  +  T(λ) · ρ(r,c,λ) · E_d(λ) / π
+
+  L_path(λ)   — atmospheric path radiance [W m⁻² sr⁻¹ µm⁻¹]
+  T(λ)        — total atmospheric transmittance (0–1)
+  ρ(r,c,λ)   — per-pixel spectral reflectance from MaterialMap
+  E_d(λ)      — downwelling solar irradiance at surface [W m⁻² µm⁻¹]</code></pre>
+
+<h2>CIE-Lab Material Matching</h2>
+<p>
+  Each cluster centroid's RGB colour is converted to CIE XYZ using the sRGB primaries,
+  then to CIE L*a*b* using the D65 illuminant (X_n = 95.047, Y_n = 100, Z_n = 108.883).
+  Each spectral signature is also converted to CIE Lab using a 43-point colour-matching
+  function (CMF) evaluated at the embedded wavelength grid.
+  The best match minimises ΔE₇₆ (Euclidean distance in Lab space).
+</p>
+
+<h2>Output File Formats</h2>
+<h3>NXI format</h3>
+<pre><code>[Header block]  ASCII JSON, UTF-8, NUL-terminated, padded to 4096 bytes
+[Data block]    float32 BIL (Band-Interleaved-by-Line), rows × bands × cols
+[Footer]        4-byte CRC32 of the data block (IEEE 802.3)</code></pre>
+
+<h2>Key References</h2>
+<ul>
+  <li>Stamnes et al. (1988) <em>Applied Optics</em> 27:2502 — DISORT algorithm</li>
+  <li>Lacis &amp; Oinas (1991) <em>J. Geophys. Res.</em> 96:9027 — Correlated-k</li>
+  <li>Kokaly et al. (2017) USGS Data Series 1035 — splib07 spectral library</li>
+  <li>Moorhead et al. (2001) <em>Optical Engineering</em> 40(9) — CameoSim</li>
+</ul>
+</section>
+
+<!-- ══════════════════════════════════════════════════ 12  TROUBLESHOOT -->
+<section id="s12">
+<h1>12 &ensp; Troubleshooting</h1>
+
+<table>
+  <thead><tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Run fails with "LUT not found"</td>
+      <td>Mode 1 FAST selected but LUT file absent</td>
+      <td>Switch to Mode 2 ACCURATE, or download/generate the LUT</td>
+    </tr>
+    <tr>
+      <td>Cluster map shows blank/black image</td>
+      <td>Image not fully classified yet</td>
+      <td>Click <strong>▶ Classify Image</strong> first; wait for "N cluster(s) found" status</td>
+    </tr>
+    <tr>
+      <td>USGS download returns 0 spectra</td>
+      <td>Server unavailable or URL changed</td>
+      <td>Check internet connection; try the curated download first; use Embedded as fallback</td>
+    </tr>
+    <tr>
+      <td>Mode 3 fails with "WSL2 not found"</td>
+      <td>WSL2 not installed or libRadtran not compiled</td>
+      <td>Use <strong>Tools → Install libRadtran</strong> wizard; ensure WSL2 is enabled in Windows Features</td>
+    </tr>
+    <tr>
+      <td>Simulation very slow (&gt; 30 s)</td>
+      <td>Large image + Mode 2 ACCURATE</td>
+      <td>Downscale the source image or switch to Mode 1 FAST for prototyping</td>
+    </tr>
+    <tr>
+      <td>Export fails with path error</td>
+      <td>Destination directory does not exist</td>
+      <td>Create the output directory before exporting</td>
+    </tr>
+    <tr>
+      <td>Labels appear truncated in panels</td>
+      <td>Form resized below minimum width</td>
+      <td>Increase the form width; minimum is 880 × 580 px; hover over truncated labels to see full text</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="box note"><strong>Reporting Issues</strong>
+  Please open a GitHub issue at <a href="https://github.com/mguneskou/NEXIM">github.com/mguneskou/NEXIM</a>
+  with the DEVLOG.md entry, OS version, and steps to reproduce.
+</div>
+
+<p style="text-align:center;margin-top:12mm;color:var(--gray);font-size:9pt">
+  NEXIM User Guide · v1.0 · May 2026<br>
+  Generated from NEXIM.slnx project — <a href="https://github.com/mguneskou/NEXIM">github.com/mguneskou/NEXIM</a>
+</p>
+</section>
+
+</body>
+</html>
