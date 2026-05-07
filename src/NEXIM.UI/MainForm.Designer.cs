@@ -23,6 +23,7 @@ partial class MainForm
         tabPageAtm        = new TabPage("Atmosphere");
         tabPageSensor     = new TabPage("Sensor");
         tabPageSeg        = new TabPage("Segmentation");
+        tabPageAnalysis   = new TabPage("Analysis");
         btnRun           = new Button();
         btnExport        = new Button();
         progressBar      = new ProgressBar();
@@ -33,7 +34,7 @@ partial class MainForm
         // ── tabControl ────────────────────────────────────────────────────
         tabControl.Dock = DockStyle.Fill;
         tabControl.TabPages.AddRange(new TabPage[]
-            { tabPageImageInput, tabPageScene, tabPageAtm, tabPageSensor, tabPageSeg });
+            { tabPageImageInput, tabPageScene, tabPageAtm, tabPageSensor, tabPageSeg, tabPageAnalysis });
 
         // ── buttons ───────────────────────────────────────────────────────
         btnRun.Text     = "▶  Run Simulation";
@@ -87,7 +88,7 @@ partial class MainForm
     #endregion
 
     TabControl           tabControl;
-    TabPage              tabPageImageInput, tabPageScene, tabPageAtm, tabPageSensor, tabPageSeg;
+    TabPage              tabPageImageInput, tabPageScene, tabPageAtm, tabPageSensor, tabPageSeg, tabPageAnalysis;
     Button               btnRun, btnExport;
     ProgressBar          progressBar;
     StatusStrip          statusStrip;

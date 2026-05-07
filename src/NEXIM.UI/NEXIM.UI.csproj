@@ -4,6 +4,10 @@
     <ProjectReference Include="..\NEXIM.Core\NEXIM.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="OxyPlot.WindowsForms" Version="2.1.2" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows</TargetFramework>
@@ -16,7 +20,6 @@
     <Product>NEXIM</Product>
     <Description>Novel End-to-eXtended hyperspectral IMage simulator</Description>
     <Copyright>Copyright © 2026 mguneskou</Copyright>
-    <ApplicationIcon>nexim.ico</ApplicationIcon>
   </PropertyGroup>
 
 </Project>
