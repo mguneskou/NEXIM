@@ -589,8 +589,10 @@ public sealed class AnalysisPanel : UserControl
     static byte Stretch(float v, float lo, float hi)
     {
         float range = hi - lo;
+        // Uniform-value band: return mid-gray so it shows as visible gray
+        // rather than collapsing to black.
         return range < 1e-6f
-               ? (byte)0
+               ? (byte)128
                : (byte)(Math.Clamp((v - lo) / range, 0f, 1f) * 255f);
     }
 
@@ -633,9 +635,34 @@ public sealed class AnalysisPanel : UserControl
             cb.Items.Clear();
             cb.Items.AddRange(items);
         }
-        _cmbR.SelectedIndex      = _cube.FindBand(0.650);
-        _cmbG.SelectedIndex      = _cube.FindBand(0.550);
-        _cmbB.SelectedIndex      = _cube.FindBand(0.450);
+        // Smart R/G/B defaults: use VIS bands when the cube covers the
+        // visible range, otherwise spread evenly across the actual range.
+        double wMinUm = _cube.Wavelengths_um.Min();
+        double wMaxUm = _cube.Wavelengths_um.Max();
+        bool coversVis = wMinUm < 0.60 && wMaxUm > 0.60;
+        int rDef, gDef, bDef;
+        if (coversVis)
+        {
+            rDef = _cube.FindBand(0.650);
+            gDef = _cube.FindBand(0.550);
+            bDef = _cube.FindBand(0.450);
+        }
+        else
+        {
+            rDef = Math.Min((int)(_cube.Bands * 0.75), _cube.Bands - 1);
+            gDef = Math.Min((int)(_cube.Bands * 0.50), _cube.Bands - 1);
+            bDef = Math.Max((int)(_cube.Bands * 0.25), 0);
+        }
+        // If all three resolve to the same band (very few bands), spread them.
+        if (rDef == gDef && gDef == bDef && _cube.Bands > 1)
+        {
+            rDef = _cube.Bands - 1;
+            gDef = _cube.Bands / 2;
+            bDef = 0;
+        }
+        _cmbR.SelectedIndex      = rDef;
+        _cmbG.SelectedIndex      = gDef;
+        _cmbB.SelectedIndex      = bDef;
         _cmbSingle.SelectedIndex = 0;
 
         // PCA component cap
